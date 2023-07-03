@@ -3,22 +3,23 @@ package ohm.softa.a13.tweets;
 import ohm.softa.a13.model.Tweet;
 import org.apache.commons.lang3.NotImplementedException;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TrumpTweetStats {
 
     public static Map<String, Long> calculateSourceAppStats(Stream<Tweet> tweetStream) {
         /* TODO group the tweets by the `sourceApp` they were created with and count how many it were per `sourceApp` */
-        throw new NotImplementedException("TrumpTweetStats.calculateSourceAppStats(...) not implemented yet.");
+		return tweetStream
+			.collect(Collectors.groupingBy(Tweet::getSourceApp, Collectors.counting()));
     }
 
     public static Map<String, Set<Tweet>> calculateTweetsBySourceApp(Stream<Tweet> tweetStream) {
         /* TODO group the tweets by the `sourceApp`
          * collect the tweets in `Set`s for each source app */
-        throw new NotImplementedException("TrumpTweetStats.calculateTweetsBySourceApp(...) not implemented yet.");
+        return tweetStream
+			.collect(Collectors.groupingBy(Tweet::getSourceApp, Collectors.toSet()));
     }
 
     public static Map<String, Integer> calculateWordCount(Stream<Tweet> tweetStream, List<String> stopWords) {
