@@ -27,6 +27,21 @@ public class TrumpTweetStats {
         /* TODO split the tweets, lower them, trim them, remove all words that are in the `stopWords`,
          * reduce the result to a Map<String, Integer> to count how often each word were in the tweets
          * optionally you could filter for all words that were used more than 10 times */
-        throw new NotImplementedException("TrumpTweetStats.tweetStream(...) not implemented yet.");
+		return tweetStream
+			.map(Tweet::getText)
+			.map(tweet -> tweet.split("( )+"))
+			.flatMap(Arrays::stream)
+			.filter(word -> !stopWords.contains(word))
+			.reduce(new HashMap<>(), (HashMap<String, Integer> map, String word) -> {
+				map.putIfAbsent(word, 0);
+				map.put(word, map.get(word)+1);
+				return map;
+			}, (m1, m2) -> {
+				m1.forEach((k, v) -> {
+					m2.putIfAbsent(k, 0);
+					m2.put(k, m2.get(k) + v);
+				});
+				return m2;
+			});
     }
 }
